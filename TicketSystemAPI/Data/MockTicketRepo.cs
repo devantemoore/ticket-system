@@ -14,7 +14,17 @@ namespace TicketSystemAPI.Data
             throw new NotImplementedException();
         }
 
+        public void CreateTicketAsync(Ticket ticket)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteTicket(Ticket ticket)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteTicketAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -36,6 +46,11 @@ namespace TicketSystemAPI.Data
             return tickets;
         }
 
+        public Task<IList<Ticket>> GetAllTicketsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Ticket GetTicketById(int id)
         {
             return new Ticket
@@ -53,7 +68,17 @@ namespace TicketSystemAPI.Data
             };
         }
 
+        public Task<Ticket> GetTicketByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetTicketNo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetTicketNoAsync()
         {
             throw new NotImplementedException();
         }
@@ -63,7 +88,22 @@ namespace TicketSystemAPI.Data
             throw new NotImplementedException();
         }
 
+        public Task<bool> TicketExistsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateTicket(Ticket ticket)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task ITicketRepo.CreateTicketAsync(Ticket ticket)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task ITicketRepo.DeleteTicketAsync(int id)
         {
             throw new NotImplementedException();
         }

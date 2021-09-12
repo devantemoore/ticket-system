@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using TicketSystemAPI.Models;
 
 namespace TicketSystemAPI.Data.Interface
 {
     public interface ITicketRepo
     {
-        public IEnumerable<Ticket> GetAllTickets();
+        public Task<IList<Ticket>> GetAllTicketsAsync();
 
-        public Ticket GetTicketById(int id);
+        public Task<Ticket> GetTicketByIdAsync(int id);
 
-        public void CreateTicket(Ticket ticket);
+        public Task CreateTicketAsync(Ticket ticket);
 
         public void UpdateTicket(Ticket ticket);
 
-        public void DeleteTicket(Ticket ticket);
+        public Task DeleteTicketAsync(int id);
 
-        public bool TicketExists(int id);
+        public Task<bool> TicketExistsAsync(int id);
 
-        public string GetTicketNo();
+        public Task<string> GetTicketNoAsync();
     }
 }

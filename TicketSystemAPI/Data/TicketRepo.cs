@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TicketSystemAPI.Data.Interface;
 using TicketSystemAPI.Models;
 
@@ -16,36 +17,36 @@ namespace TicketSystemAPI.Data
             _context = context;
         }
 
-        public void CreateTicket(Ticket ticket)
+        public async Task CreateTicketAsync(Ticket ticket)
         {
             if (ticket == null)
             {
                 throw new ArgumentNullException();
             }
-            _context.Tickets.Add(ticket);
-            _context.SaveChanges();
+            await _context.Tickets.AddAsync(ticket);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteTicket(Ticket ticket)
+        public async Task DeleteTicketAsync(int id)
         {
+            Ticket ticket = await GetTicketByIdAsync(id);
             _context.Tickets.Remove(ticket);
-            _context.SaveChanges();
         }
 
-        public IEnumerable<Ticket> GetAllTickets()
+        public async Task<IList<Ticket>> GetAllTicketsAsync()
         {
-            return _context.Tickets.ToList();
+            return await _context.Tickets.ToListAsync();
         }
 
-        public Ticket GetTicketById(int id)
+        public async Task<Ticket> GetTicketByIdAsync(int id)
         {
-            return _context.Tickets.FirstOrDefault(t => t.Id == id);
+            return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public string GetTicketNo()
+        public async Task<string> GetTicketNoAsync()
         {
             string ticketNo = "T-";
-            var ticket = _context.Tickets.OrderByDescending(t => t.Id).FirstOrDefault();
+            var ticket = await _context.Tickets.OrderByDescending(t => t.Id).FirstOrDefaultAsync();
             int _no = ticket.Id;
             _no++;
             switch (_no.ToString().Length)
@@ -77,14 +78,15 @@ namespace TicketSystemAPI.Data
             return ticketNo;
         }
 
-        public bool TicketExists(int id)
+        public async Task<bool> TicketExistsAsync(int id)
         {
-            var ticket = GetTicketById(id);
+            var ticket = await GetTicketByIdAsync(id);
             return (ticket != null) ? true : false;
         }
 
         public void UpdateTicket(Ticket ticket)
         {
+            _context.Update(ticket);
             _context.SaveChanges();
         }
     }

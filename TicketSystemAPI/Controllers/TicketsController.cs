@@ -24,31 +24,27 @@ namespace TicketSystemAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Ticket>> Get()
+        public async Task<ActionResult<IEnumerable<Ticket>>> Get()
         {
-            var tickets = _context.GetAllTickets();
+            var tickets = await _context.GetAllTicketsAsync();
             return Ok(tickets);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Ticket> Get(int id)
+        public async Task<ActionResult<Ticket>> Get(int id)
         {
-            var ticket = _context.GetTicketById(id);
-            if (ticket != null)
-            {
-                return Ok(ticket);
-            }
-            return NotFound();
+            Ticket ticket = await _context.GetTicketByIdAsync(id);
+            return ticket != null ? Ok(ticket) : NotFound();
         }
 
         [HttpPost]
-        public ActionResult<Ticket> CreateTicket(CreateTicketDTO ticket)
+        public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDTO ticket)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            string ticketno = _context.GetTicketNo();
+            string ticketno = await _context.GetTicketNoAsync();
             Ticket _ticket = new Ticket
             {
                 TicketNumber = ticketno,
@@ -61,14 +57,14 @@ namespace TicketSystemAPI.Controllers
                 Status = Status.Open
             };
 
-            _context.CreateTicket(_ticket);
+            await _context.CreateTicketAsync(_ticket);
             return Created("api/tickets/" + _ticket.Id.ToString(), ticket);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateTicket(int id, UpdateTicketDTO updateTicket)
+        public async Task<ActionResult> UpdateTicket(int id, UpdateTicketDTO updateTicket)
         {
-            var ticket = _context.GetTicketById(id);
+            var ticket = await _context.GetTicketByIdAsync(id);
             if (ticket == null) return NotFound();
 
             ticket.Title = updateTicket.Title ?? ticket.Title;
@@ -84,11 +80,9 @@ namespace TicketSystemAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult RemoveTicket(int id)
-        {
-            var ticket = _context.GetTicketById(id);
-            if (ticket == null) return NotFound();
-            _context.DeleteTicket(ticket);
+        public async Task<ActionResult> RemoveTicket(int id)
+        { 
+            await _context.DeleteTicketAsync(id);
             return NoContent();
         }
     }

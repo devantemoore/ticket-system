@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.Extensions.Hosting;
 using TicketSystemAPI.Data;
 using TicketSystemAPI.Data.Interface;
@@ -24,8 +25,9 @@ namespace TicketSystemAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<TicketDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TicketDB")));
-            services.AddScoped<ITicketRepo, TicketRepo>();
+            services.AddDbContext<TicketDBContext>(options => options.UseInMemoryDatabase("Tickets"));
+            //options.UseSqlServer(Configuration.GetConnectionString("TicketDB")));
+            services.AddScoped<ITicketRepo,TicketRepo>();
 
             services.AddCors(options =>
             {

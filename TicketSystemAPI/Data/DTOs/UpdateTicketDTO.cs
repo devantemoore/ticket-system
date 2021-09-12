@@ -20,7 +20,7 @@ namespace TicketSystemAPI.Data.DTOs
         [MaxLength(45)]
         public string Email { get; set; }
 
-        public string? Assignee { get; set; }
+        public string Assignee { get; set; }
         public Priority? Priority { get; set; }
         public Status? Status { get; set; }
     }
