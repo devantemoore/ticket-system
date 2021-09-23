@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TicketSystemAPI.Data.Interface;
 using TicketSystemAPI.Models;
 
@@ -16,7 +16,14 @@ namespace TicketSystemAPI.Data
         {
             _context = context;
         }
-
+        public async Task<IList<Ticket>> GetAllTicketsAsync()
+        {
+            return await _context.Tickets.ToListAsync();
+        }
+        public async Task<Ticket> GetTicketByIdAsync(int id)
+        {
+            return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+        }
         public async Task CreateTicketAsync(Ticket ticket)
         {
             if (ticket == null)
@@ -26,23 +33,11 @@ namespace TicketSystemAPI.Data
             await _context.Tickets.AddAsync(ticket);
             await _context.SaveChangesAsync();
         }
-
         public async Task DeleteTicketAsync(int id)
         {
             Ticket ticket = await GetTicketByIdAsync(id);
             _context.Tickets.Remove(ticket);
         }
-
-        public async Task<IList<Ticket>> GetAllTicketsAsync()
-        {
-            return await _context.Tickets.ToListAsync();
-        }
-
-        public async Task<Ticket> GetTicketByIdAsync(int id)
-        {
-            return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
-        }
-
         public async Task<string> GetTicketNoAsync()
         {
             string ticketNo = "T-";
